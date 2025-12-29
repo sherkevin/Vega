@@ -1,0 +1,20 @@
+services:
+  litellm:
+    # Using anythingllm as alternative LLM service
+    image: docker.1ms.run/mintplexlabs/anythingllm:latest
+    container_name: litellm-proxy
+    restart: unless-stopped
+    networks:
+      - sentient_network
+    volumes:
+      - ./src/server/litellm-config.yaml:/app/config.yaml:ro
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    env_file:
+      - ./src/server/.env
+    ports:
+      - "4000:4000" # Exposing the port for local testing/access
+
+networks:
+  sentient_network:
+    driver: bridge
+    name: sentient_network

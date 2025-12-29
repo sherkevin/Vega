@@ -1,0 +1,7 @@
+fastmcp
+python-dotenv
+textract==1.5.0
+ebooklib
+beautifulsoup4
+python-pptx
+xlrd
