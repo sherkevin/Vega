@@ -238,20 +238,10 @@ async def generate_chat_llm_stream(
         tool_display_names = [INTEGRATIONS_CONFIG.get(t, {}).get('display_name', t) for t in relevant_tool_names if t != 'memory']
         if tool_display_names:
             yield {"type": "status", "message": f"Using: {', '.join(tool_display_names)}"}
-        mandatory_tools = {"memory", "history", "tasks"}
-        final_tool_names = set(relevant_tool_names) | mandatory_tools
-        filtered_mcp_servers = {}
-        for tool_name in final_tool_names:
-            config = INTEGRATIONS_CONFIG.get(tool_name, {})
-            if not config: continue
-            mcp_config = config.get("mcp_server_config", {})
-            if not (mcp_config and mcp_config.get("url") and mcp_config.get("name")): continue
-            server_name = mcp_config["name"]
-            base_url = mcp_config["url"]
-            headers = {"X-User-ID": user_id}
-            filtered_mcp_servers[server_name] = {"url": base_url, "headers": headers, "transport": "sse"}
-        tools = [{"mcpServers": filtered_mcp_servers}]
-        logger.info(f"Final tools for agent: {list(filtered_mcp_servers.keys())}")
+
+        # Temporarily disable tools to test basic chat functionality
+        tools = []  # No tools for now
+        logger.info(f"Final tools for agent: DISABLED (testing basic chat)")
     except Exception as e:
         logger.error(f"Failed during initial setup for chat stream for user {user_id}: {e}", exc_info=True)
         yield {"type": "error", "message": "Failed to set up chat stream."}
