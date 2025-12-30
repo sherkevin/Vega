@@ -322,12 +322,12 @@ async def update_privacy_filters_endpoint(
 async def get_user_properties(
     payload: dict = Depends(auth_helper.get_decoded_payload_with_claims)
 ):
-    user_email = payload.get("email")
-    if not user_email:
-        raise HTTPException(status_code=400, detail="User email not found in token.")
-
-    properties = await get_user_properties_from_sheet(user_email)
-
+    # Return mock data to avoid Google Sheets dependency in selfhost mode
+    properties = {
+        "plan_type": "selfhost",
+        "is_insider": False,
+        "source": "selfhost"
+    }
     return JSONResponse(content=properties)
 
 @router.get("/search/interactive", summary="Interactive search for tasks, chats, and memories")
