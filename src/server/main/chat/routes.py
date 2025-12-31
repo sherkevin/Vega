@@ -119,6 +119,18 @@ async def create_conversation(title: Optional[str] = None):
     conv = await mongo_manager.create_conversation(DEFAULT_USER_ID, title=title)
     return {"conversation_id": conv["conversation_id"], "title": conv["title"]}
 
+class UpdateConversationRequest(BaseModel):
+    """Update conversation request model"""
+    title: str
+
+@router.put("/conversations/{conversation_id}", summary="Update conversation")
+async def update_conversation(conversation_id: str, request: UpdateConversationRequest):
+    """
+    Update conversation title
+    """
+    await mongo_manager.update_conversation_title(DEFAULT_USER_ID, conversation_id, request.title)
+    return {"message": "Conversation updated successfully.", "title": request.title}
+
 @router.delete("/conversations/{conversation_id}", summary="Delete conversation")
 async def delete_conversation(conversation_id: str):
     """

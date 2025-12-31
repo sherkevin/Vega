@@ -82,11 +82,11 @@ async def generate_chat_llm_stream(
         recent_messages = await db_manager.get_recent_messages(user_id, conversation_id, limit=10)
         logger.info(f"Retrieved {len(recent_messages)} recent messages for user {user_id}")
         
-        # 2. 检索长期记忆（mem0）
+        # 2. 检索长期记忆（mem0）- 使用 conversation_id 隔离不同对话的记忆
         long_term_memories = []
         try:
-            long_term_memories = await mem0_client.search_memories(user_id, user_message, limit=5)
-            logger.info(f"Retrieved {len(long_term_memories)} long-term memories for user {user_id}")
+            long_term_memories = await mem0_client.search_memories(user_id, user_message, limit=5, conversation_id=conversation_id)
+            logger.info(f"Retrieved {len(long_term_memories)} long-term memories for user {user_id} (conversation: {conversation_id})")
         except Exception as e:
             logger.warning(f"Failed to retrieve long-term memories: {e}")
         
@@ -212,7 +212,7 @@ Your role is to have natural, helpful conversations. Be friendly, informative, a
                     try:
                         # 构建对话历史用于记忆提取
                         conversation_for_memory = messages + [{"role": "assistant", "content": final_content}]
-                        await mem0_client.extract_and_store(user_id, conversation_for_memory)
+                        await mem0_client.extract_and_store(user_id, conversation_for_memory, conversation_id=conversation_id)
                     except Exception as e:
                         logger.warning(f"Failed to extract memories: {e}")
                 

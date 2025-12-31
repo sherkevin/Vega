@@ -82,6 +82,7 @@ class MongoManager:
                 "title": conv.get("title", "New Chat"),
                 "created_at": conv.get("created_at").isoformat() if isinstance(conv.get("created_at"), datetime.datetime) else conv.get("created_at"),
                 "updated_at": conv.get("updated_at").isoformat() if isinstance(conv.get("updated_at"), datetime.datetime) else conv.get("updated_at"),
+                "last_updated": conv.get("updated_at").isoformat() if isinstance(conv.get("updated_at"), datetime.datetime) else conv.get("updated_at"),
             })
         
         return result
