@@ -27,11 +27,17 @@ module.exports = {
 				"brand-orange": "#F1A21D",
 				"brand-white": "#DFDEDC",
 				"brand-red": "#D63447",
-				"brand-black": "#000000",
 				"brand-yellow": "#FFC947",
 				"brand-green": "#28A745",
 				"sentient-blue": "#4a9eff",
-				"sentient-blue-dark": "#3a8eff"
+				"sentient-blue-dark": "#3a8eff",
+				// Warm Tech 2.0 Color System
+				"deep-space": "#0F0F13",
+				"soul-blue": "#4A9EFF",
+				"warm-amber": "#FFD166",
+				"mystery-purple": "#9D4EDD",
+				"soft-white": "#F0F0F0",
+				"muted-blue-gray": "#A0A0B0"
 			},
 			keyframes: {
 				meteor: {
@@ -120,7 +126,8 @@ module.exports = {
 			},
 			boxShadow: {
 				glow: "0 0 20px rgba(65, 105, 225, 0.7), 0 0 40px rgba(0, 123, 255, 0.5), 0 0 60px rgba(30, 144, 255, 0.3)",
-				glow2: "0 0 20px rgba(0, 191, 255, 0.7), 0 0 40px rgba(70, 130, 180, 0.5), 0 0 60px rgba(100, 149, 237, 0.3)"
+				glow2: "0 0 20px rgba(0, 191, 255, 0.7), 0 0 40px rgba(70, 130, 180, 0.5), 0 0 60px rgba(100, 149, 237, 0.3)",
+				"inner-glow": "inset 0 0 20px rgba(74, 158, 255, 0.3)"
 			},
 			filter: {
 				"blur-20": "blur(20px)",
@@ -128,8 +135,28 @@ module.exports = {
 			},
 			brightness: {
 				150: "1.5"
+			},
+			backdropBlur: {
+				xs: "2px"
 			}
 		}
 	},
-	plugins: []
+	plugins: [
+		function({ addUtilities }) {
+			addUtilities({
+				'.glass': {
+					'backdrop-filter': 'blur(24px)',
+					'background-color': 'rgba(255, 255, 255, 0.05)',
+					'border': '1px solid rgba(255, 255, 255, 0.1)',
+					'box-shadow': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+				},
+				'.glass-strong': {
+					'backdrop-filter': 'blur(40px)',
+					'background-color': 'rgba(255, 255, 255, 0.1)',
+					'border': '1px solid rgba(255, 255, 255, 0.15)',
+					'box-shadow': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+				},
+			})
+		}
+	]
 }
