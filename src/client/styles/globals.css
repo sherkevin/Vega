@@ -152,3 +152,52 @@ button,
     background-position: 200% 0;
   }
 }
+
+/* Hide browser autocomplete icons and floating elements */
+textarea::-webkit-credentials-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+}
+
+/* Hide any browser-generated user icons or avatars */
+textarea::before,
+textarea::after,
+input::before,
+input::after {
+	display: none !important;
+	content: none !important;
+}
+
+/* Hide browser autofill icons */
+input:-webkit-autofill,
+textarea:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+}
+
+/* Hide any floating user profile icons or browser extension elements */
+[class*="user-icon"],
+[class*="avatar"],
+[class*="profile-icon"],
+[class*="floating"],
+[id*="user-icon"],
+[id*="avatar"],
+[id*="profile-icon"],
+[id*="floating"],
+img[alt*="user"],
+img[alt*="avatar"],
+img[alt*="profile"] {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+}
+
+/* Hide browser extension injected elements near input areas */
+div[class*="user"],
+div[id*="user"],
+span[class*="user"],
+span[id*="user"] {
+	display: none !important;
+}

@@ -1,14 +1,29 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import ThoughtProcessModal from "./ThoughtProcessModal"
 import TypewriterText from "@components/ui/TypewriterText"
 
 const ChatBubble = ({ message, isStreaming = false }) => {
 	const [showThoughtProcess, setShowThoughtProcess] = useState(false)
+	const [showThinking, setShowThinking] = useState(false)
 	const isUser = message.role === "user"
 	const hasThoughtProcess = message.turn_steps && message.turn_steps.length > 0
+	
+	// Show "thinking" indicator only for a limited time (3 seconds) after message creation
+	useEffect(() => {
+		if (!isUser && hasThoughtProcess && !isStreaming) {
+			setShowThinking(true)
+			const timer = setTimeout(() => {
+				setShowThinking(false)
+			}, 3000) // Hide after 3 seconds
+			return () => clearTimeout(timer)
+		} else if (isStreaming) {
+			// Hide thinking indicator when streaming starts
+			setShowThinking(false)
+		}
+	}, [isUser, hasThoughtProcess, isStreaming])
 
 	return (
 		<>
@@ -28,14 +43,15 @@ const ChatBubble = ({ message, isStreaming = false }) => {
 					{/* 消息内容 */}
 					<div className="text-soft-white font-light leading-7">
 						{isStreaming && !isUser ? (
-							<TypewriterText text={message.content || ""} speed={20} />
+							// For streaming, show text directly without typewriter effect to avoid flickering
+							<span className="whitespace-pre-wrap">{message.content || ""}</span>
 						) : (
 							<span className="whitespace-pre-wrap">{message.content}</span>
 						)}
 					</div>
 
-					{/* 思维链指示器（仅 Agent 消息） */}
-					{!isUser && hasThoughtProcess && (
+					{/* 思维链指示器（仅 Agent 消息，且仅在有限时间内显示） */}
+					{!isUser && hasThoughtProcess && showThinking && (
 						<button
 							onClick={() => setShowThoughtProcess(true)}
 							className="mt-2 flex items-center gap-2 text-xs text-muted-blue-gray hover:text-soft-white transition-colors group"

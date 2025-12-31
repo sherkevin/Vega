@@ -1,0 +1,78 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+!DOCKER_README.md
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info
+dist
+build
+.venv
+venv
+env
+ENV
+info
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+.pnpm-debug.log
+.next
+out
+build
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs
+
+# Test files
+test_*.py
+*_test.py
+*_test.js
+
+# MongoDB data
+data
+*.db
+
+# mem0 data (will be in volume)
+.mem0_db
+
+# PowerShell scripts (not needed in Docker)
+*.ps1
+
+# Temporary files
+tmp
+temp
+*.tmp
+
+# Docker files (don't copy into containers)
+docker-compose.yml
+Dockerfile*
+.dockerignore

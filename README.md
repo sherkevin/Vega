@@ -1,6 +1,20 @@
-# Simple Chat Bot
+# Vega Chat Bot
 
 A minimal AI chat assistant with conversation and memory capabilities, similar to Doubao web interface.
+
+## 🐳 Docker 一键启动（推荐）
+
+**最简单的方式：使用 Docker 一键启动所有服务**
+
+1. 复制 `.env.example` 为 `.env` 并设置你的 API Key
+2. 运行 `docker-compose up -d` 或使用启动脚本：
+   - Windows: `docker-start.bat`
+   - Linux/Mac: `./docker-start.sh`
+3. 访问 http://localhost:3000
+
+详细说明请查看 [DOCKER_README.md](./DOCKER_README.md)
+
+---
 
 ## Features
 

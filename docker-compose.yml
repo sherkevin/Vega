@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: vega-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: sentient_db
+    networks:
+      - vega-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: vega-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    env_file:
+      - .env
+    environment:
+      - APP_SERVER_PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/sentient_db
+      - MONGO_DB_NAME=sentient_db
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL:-https://llmapi.paratera.com/v1}
+      - OPENAI_MODEL_NAME=${OPENAI_MODEL_NAME:-DeepSeek-V3.2}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - mem0_data:/app/src/server/.mem0_db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - vega-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:5000
+    container_name: vega-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - vega-network
+
+volumes:
+  mongodb_data:
+  mem0_data:
+
+networks:
+  vega-network:
+    driver: bridge
+

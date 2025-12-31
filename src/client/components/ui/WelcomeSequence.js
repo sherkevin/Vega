@@ -1,8 +1,17 @@
+/**
+ * @Author: shervin sherkevin@163.com
+ * @Date: 2025-12-31 10:48:04
+ * @Description: 
+ * @FilePath: \Vega\src\client\components\ui\WelcomeSequence.js
+ * @LastEditTime: 2025-12-31 15:00:57
+ * @LastEditors: shervin sherkevin@163.com
+ * @Copyright (c) 2025 by ${git_name_email}, All Rights Reserved. 
+ */
 "use client"
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import AnimatedLogo from "./AnimatedLogo"
+import ParticleOrb from "./ParticleOrb"
 
 const WelcomeSequence = ({ onComplete }) => {
 	const [stage, setStage] = useState(0) // 0: 黑屏, 1: Logo亮起, 2: 文字浮现, 3: 完成
@@ -55,7 +64,7 @@ const WelcomeSequence = ({ onComplete }) => {
 							transition={{ duration: 1, ease: "easeOut" }}
 							className="absolute"
 						>
-							<AnimatedLogo state="idle" />
+							<ParticleOrb size={120} />
 						</motion.div>
 					)}
 
