@@ -261,7 +261,7 @@ class Mem0Client:
         
         Args:
             user_id: 用户ID
-            conversation_history: 对话历史列表
+            conversation_history: 对话历史列表，格式为 [{"role": "user", "content": "..."}, ...]
             conversation_id: 对话ID，用于隔离不同对话的记忆
             
         Returns:
@@ -276,29 +276,32 @@ class Mem0Client:
             # 格式: {user_id}:{conversation_id} 或 {user_id} (如果没有 conversation_id)
             memory_user_id = f"{user_id}:{conversation_id}" if conversation_id else user_id
             
-            # 将对话历史转换为文本格式
-            conversation_text = "\n".join([
-                f"{msg.get('role', 'unknown')}: {msg.get('content', '')}"
-                for msg in conversation_history
-            ])
-            
             # 准备 metadata，包含 conversation_id
             metadata = {}
             if conversation_id:
                 metadata["conversation_id"] = conversation_id
             
-            # 使用mem0的extract方法自动提取记忆
-            # extract 方法可能需要 metadata 参数，如果支持的话
-            try:
-                memories = self.memory.extract(conversation_text, user_id=memory_user_id, metadata=metadata)
-            except TypeError:
-                # 如果 extract 不支持 metadata 参数，只传 user_id
-                memories = self.memory.extract(conversation_text, user_id=memory_user_id)
+            # mem0 的 add 方法可以接受 messages 参数（列表格式）
+            # 当 infer=True（默认）时，会自动使用 LLM 提取关键事实并决定是添加、更新还是删除相关记忆
+            # add 方法接受 messages 参数，可以是：
+            # - 字符串
+            # - 字典 {"role": "user", "content": "..."}
+            # - 字典列表 [{"role": "user", "content": "..."}, ...]
+            result = self.memory.add(
+                messages=conversation_history,
+                user_id=memory_user_id,
+                metadata=metadata if metadata else None,
+                infer=True  # 使用 LLM 自动提取记忆
+            )
             
-            if memories:
-                logger.info(f"Extracted {len(memories)} memories for user {user_id} (conversation: {conversation_id})")
+            # result 格式: {"results": [{"id": "...", "memory": "...", "event": "ADD"}]}
+            if result and result.get("results"):
+                extracted_count = len(result["results"])
+                logger.info(f"Extracted {extracted_count} memories for user {user_id} (conversation: {conversation_id})")
                 return True
-            return False
+            else:
+                logger.info(f"No new memories extracted for user {user_id} (conversation: {conversation_id})")
+                return False
         except Exception as e:
             logger.error(f"Error extracting memories for user {user_id} (conversation: {conversation_id}): {e}", exc_info=True)
             return False
