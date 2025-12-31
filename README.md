@@ -1,151 +1,134 @@
-<div align="center">
+# Simple Chat Bot
 
-![README Banner](./.github/assets/banner.png)
+A minimal AI chat assistant with conversation and memory capabilities, similar to Doubao web interface.
 
-<h1>Open-Source Personal Assistant</h1>
-  
-<!-- Badges -->
-<p>
-  <a href="https://github.com/existence-master/Sentient/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/existence-master/Sentient" alt="contributors" />
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/github/last-commit/existence-master/Sentient" alt="last update" />
-  </a>
-  <a href="https://github.com/existence-master/Sentient/network/members">
-    <img src="https://img.shields.io/github/forks/existence-master/Sentient" alt="forks" />
-  </a>
-  <a href="https://github.com/existence-master/Sentient/stargazers">
-    <img src="https://img.shields.io/github/stars/existence-master/Sentient" alt="stars" />
-  </a>
-  <a href="https://github.com/existence-master/Sentient/issues/">
-    <img src="https://img.shields.io/github/issues/existence-master/Sentient" alt="open issues" />
-  </a>
-</p>
-   
-<h4>
-    <a href="https://youtu.be/wCmWFUX_ZrM?si=WpqLu_Dskh7ayxGE">View Demo</a>
-  <span> · </span>
-    <a href="https://sentient-2.gitbook.io/docs">Documentation</a>
-  <span> · </span>
-    <a href="https://github.com/existence-master/Sentient/issues/">Report Bug</a>
-  <span> · </span>
-    <a href="https://github.com/existence-master/Sentient/issues/">Request Feature</a>
-  <span> · </span>
-    <a href="https://www.youtube.com/watch?v=l481bvpCjbc">Watch our Ad!</a>
-  </h4>
-</div>
+## Features
 
-<br />
+- ✅ **Pure Chat** - Stream-based conversation
+- ✅ **Short-term Memory** - Last 5 rounds of conversation (10 messages)
+- ✅ **Long-term Memory** - mem0 integration for persistent memory
+- ✅ **Beautiful UI** - Clean, centered interface like Doubao
+- ❌ **No Authentication** - Open access, no login required
 
-> Sentient is an advanced personal assistant and the first step towards fully autonomous agents that will automate monotonous busywork for us, so that we can focus on what matters.
->
-> Our goal is to give everyone personal super-intelligence.
->
-> It acts as your central command center, bridging the gap between your goals and the actions required to achieve them. It is designed to be a truly proactive partner that understands you, manages your digital life, and gets things done—without you having to type long, complex prompts.
->
-> It can:
-> - **💬 Chat with you** about any topic via text or voice.
-> - **🧠 Learn your preferences, habits, and goals** to better serve you over time.
-> - **⚙️ Execute complex, multi-step tasks** and recurring workflows.
-> - **🗓️ Proactively manage your day**, reading your emails and calendar to suggest schedules and remind you of important events.
-> - **🔗 Integrate seamlessly** with the apps you use every day.
->
-> For more information [read our manifesto.](https://docs.google.com/document/d/1vbCGAbh9f8vXfPup_Z7cW__gnOLdRhEtHKyoIxJD8is/edit?tab=t.0#heading=h.2kit9yqvlc77)
+## Tech Stack
 
----
+- **Backend**: FastAPI + MongoDB + mem0 + qwen-agent
+- **Frontend**: Next.js + React + Tailwind CSS
+- **LLM**: Configurable via `.env` (OpenAI-compatible API)
 
-## ✨ Current Features
+## Quick Start
 
-<img width="1916" height="891" alt="image" src="https://github.com/user-attachments/assets/8566eb83-cb74-4cfc-84cb-1f8ba5b5d152" />
+### 1. Install Dependencies
 
-<div align="center">
-  <p>Text Chat</p>
-</div>
+**Backend:**
+```powershell
+cd src\server
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-<img width="1916" height="891" alt="image" src="https://github.com/user-attachments/assets/7718aed6-4538-4811-b850-7a246d362dcd" />
+**Frontend:**
+```powershell
+cd src\client
+npm install
+```
 
-<div align="center">
-  <p>Voice Chat</p>
-</div>
+### 2. Configure Environment
 
-<img width="1916" height="891" alt="image" src="https://github.com/user-attachments/assets/03ff343c-d2eb-4ca4-98ce-8ed31e11dd8c" />
+Create `src/server/.env`:
+```env
+# Server
+APP_SERVER_PORT=5000
 
-<div align="center">
-  <p>Manage background tasks from the Tasks page - create Recurring, Triggered, Scheduled or Swarm tasks.</p>
-</div>
+# Database
+MONGO_URI=mongodb://localhost:27017/chatbot_db
+MONGO_DB_NAME=chatbot_db
 
-<img width="1916" height="891" alt="image" src="https://github.com/user-attachments/assets/ccb1b22b-2199-4c4d-aca1-402e2b608c2d" />
+# LLM Configuration
+OPENAI_API_BASE_URL=https://llmapi.paratera.com/v1
+OPENAI_MODEL_NAME=DeepSeek-V3.2
+OPENAI_API_KEY=sk-your-api-key-here
+```
 
-<div align="center">
-  <p>Sentient learns memories about you - that it uses to personalize actions and responses.</p>
-</div>
+Create `src/client/.env.local`:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
 
-<img width="1916" height="891" alt="image" src="https://github.com/user-attachments/assets/ee8b9fb4-a916-48b7-92c3-c194765a846a" />
+### 3. Start Services
 
-<div align="center">
-  <p>Connect all your tools. (20+ apps supported already)</p>
-</div>
+**Option 1: Use startup script**
+```powershell
+.\start_simple.ps1
+```
 
-### 🚀 Getting Started
+**Option 2: Manual start**
 
-To access Sentient, head over to [our website.](https://sentient.existence.technology/)
+Terminal 1 - Backend:
+```powershell
+cd src\server
+.\.venv\Scripts\activate
+python -m main.app
+```
 
-### 🔒 Self-Hostable
-The entire platform is open-source and can be self-hosted and configured to run fully locally, ensuring your data stays private. [Check the relevant docs for more info.](https://sentient-2.gitbook.io/docs/getting-started/running-sentient-from-source-self-host)
+Terminal 2 - Frontend:
+```powershell
+cd src\client
+npm run dev
+```
 
----
+### 4. Access
 
-## :wave: Contributing
+- Frontend: http://localhost:3000
+- API Docs: http://localhost:5000/docs
 
-<a href="https://github.com/existence-master/Sentient/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=existence-master/Sentient" />
-</a>
+## Project Structure
 
-Contributions are always welcome!
+```
+src/
+├── server/main/
+│   ├── app.py              # FastAPI app (no auth)
+│   ├── config.py           # Configuration
+│   ├── db.py               # MongoDB (fixed user ID)
+│   ├── llm.py              # LLM calls
+│   ├── chat/
+│   │   ├── routes.py        # Chat routes (no auth)
+│   │   └── utils.py         # Chat logic with memory
+│   └── memory/
+│       └── mem0_client.py   # mem0 client (optional)
+└── client/
+    ├── app/
+    │   ├── layout.js        # Simple layout
+    │   └── page.js          # Chat page (Doubao-style)
+    └── components/ui/
+        └── InteractiveNetworkBackground.js
+```
 
-See the [contributing guide](https://github.com/existence-master/Sentient/blob/master/CONTRIBUTING.md) for ways to get started.
+## Memory System
 
-<!-- Code of Conduct -->
+### Short-term Memory
+- Automatically maintains last 5 rounds (10 messages)
+- Stored in MongoDB
+- Loaded automatically on each conversation
 
-### :scroll: Code of Conduct
+### Long-term Memory (Optional)
+- Uses mem0 library for persistent memory
+- Automatically extracts and stores important facts
+- Requires: `pip install mem0ai`
+- If not installed, app still works but without long-term memory
 
-Please read the [code of conduct](https://github.com/existence-master/Sentient/blob/master/CODE_OF_CONDUCT.md)
+## API Endpoints
 
-<!-- License -->
+- `POST /api/chat/message` - Send chat message (streaming)
+- `GET /api/chat/history` - Get chat history
+- `POST /api/chat/delete` - Delete messages
 
-## :warning: License
+All endpoints are public (no authentication required).
 
-Distributed under the GNU AGPL License. See [LICENSE.txt](https://github.com/existence-master/Sentient/blob/master/LICENSE.txt) for details.
+## Notes
 
-<!-- Contact -->
-
-## :handshake: Contact
-
-[existence.sentient@gmail.com](mailto:existence.sentient@gmail.com)
-
-<!-- Official Team -->
-
-## :heavy_check_mark: Official Team
-
-<table>
-  <tr>
-     <td align="center">
-       <a href="https://github.com/itsskofficial">
-         <img src="https://avatars.githubusercontent.com/u/65887545?v=4?s=100" width="100px;" alt=""/>
-         <br />
-         <sub><b>itsskofficial (Sarthak)</b></sub>
-       </a>
-     </td>  
-     <td align="center">
-       <a href="https://github.com/kabeer2004">
-         <img src="https://avatars.githubusercontent.com/u/59280736?v=4" width="100px;" alt=""/>
-         <br />
-         <sub><b>kabeer2004</b></sub>
-       </a>
-     </td>  
-  </tr>
-</table>
-<br />
-
-![Powered By](./.github/assets/powered-by.png)
+- MongoDB must be running
+- LLM API key must be configured in `.env`
+- mem0ai is optional - app works without it
+- All users share the same conversation history (single user mode)
